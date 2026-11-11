@@ -2,6 +2,7 @@ package taskManager.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import taskManager.exceptions.ResourceNotFoundException;
 import taskManager.dtos.TaskDTO;
 import taskManager.entities.Task;
 import taskManager.enumns.Status;
@@ -34,12 +35,12 @@ public class TaskService {
     }
 
     public TaskDTO findById(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow();
+        Task task = getTaskOrThrow(id);
         return modelMapper.map(task, TaskDTO.class);
     }
 
     public TaskDTO update(Long id, TaskDTO taskDTO) {
-        Task existing = taskRepository.findById(id).orElseThrow();
+        Task existing = getTaskOrThrow(id);
         existing.setTitulo(taskDTO.getTitulo());
         existing.setDescripcion(taskDTO.getDescripcion());
         existing.setStatus(taskDTO.getStatus());
@@ -53,9 +54,14 @@ public class TaskService {
     }
 
     public TaskDTO updateStatus(Long id, Status status) {
-        Task existing = taskRepository.findById(id).orElseThrow();
+        Task existing = getTaskOrThrow(id);
         existing.setStatus(status);
         Task updated = taskRepository.save(existing);
         return modelMapper.map(updated, TaskDTO.class);
+    }
+
+    private Task getTaskOrThrow(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + id));
     }
 }
