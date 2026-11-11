@@ -35,7 +35,14 @@ public class Task {
         this.descripcion = descripcion;
         this.status = status;
         this.dueDate = dueDate;
+    }
+
+    @PrePersist
+    public void prePersist() {
         this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = Status.PENDING;
+        }
     }
 
     public Long getId() { return id; }
