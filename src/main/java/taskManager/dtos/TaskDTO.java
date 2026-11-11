@@ -1,4 +1,6 @@
 package taskManager.dtos;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import taskManager.enumns.Status;
 
 import java.time.LocalDateTime;
@@ -6,6 +8,8 @@ import java.time.LocalDateTime;
 public class TaskDTO {
 
     private Long id;
+    @NotBlank(message = "Title cannot be empty")
+    @Size(min = 3, message = "Title must be at least 3 characters")
     private String titulo;
     private String descripcion;
     private Status status;

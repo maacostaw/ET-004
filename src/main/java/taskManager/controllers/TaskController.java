@@ -1,5 +1,6 @@
 package taskManager.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import taskManager.dtos.TaskDTO;
 import taskManager.services.TaskService;
@@ -17,7 +18,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskDTO create(@RequestBody TaskDTO taskDTO) {
+    public TaskDTO create(@Valid @RequestBody TaskDTO taskDTO) {
         return taskService.create(taskDTO);
     }
 
@@ -32,7 +33,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public TaskDTO update(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+    public TaskDTO update(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO) {
         return taskService.update(id, taskDTO);
     }
 
